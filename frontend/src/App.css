@@ -1,0 +1,440 @@
+#root {
+    min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+p {
+    margin-top: 0;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    background-color: #2563eb;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+input,
+select {
+    padding: 11px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background-color: white;
+}
+
+input:focus,
+select:focus {
+    border-color: #2563eb;
+}
+
+/* =========================
+   Dashboard
+========================= */
+
+.dashboard {
+    min-height: 100vh;
+    background-color: #f5f7fb;
+}
+
+.dashboard-header {
+    background-color: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.dashboard-header h1 {
+    margin-bottom: 5px;
+    color: #2563eb;
+}
+
+.dashboard-header p {
+    margin-bottom: 0;
+    color: #6b7280;
+}
+
+.logout-button {
+    background-color: #ef4444;
+}
+
+.logout-button:hover {
+    background-color: #dc2626;
+}
+
+.dashboard-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.dashboard-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.dashboard-title h2 {
+    margin-bottom: 6px;
+}
+
+.dashboard-title p {
+    color: #6b7280;
+    margin-bottom: 0;
+}
+
+/* =========================
+   Statistics
+========================= */
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.stat-card h3 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: #2563eb;
+}
+
+.stat-card p {
+    margin-bottom: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* =========================
+   Search and Filter
+========================= */
+
+.filter-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.filter-container input {
+    flex: 1;
+}
+
+/* =========================
+   Job Cards
+========================= */
+
+.jobs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.job-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.job-card h3 {
+    margin-bottom: 6px;
+}
+
+.job-role {
+    font-weight: 600;
+    color: #374151;
+}
+
+.job-info p {
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.job-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.delete-button {
+    background-color: #ef4444;
+}
+
+.delete-button:hover {
+    background-color: #dc2626;
+}
+
+/* =========================
+   Status Badges
+========================= */
+
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-applied {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-interview {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-offer {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-rejected {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* =========================
+   Empty State
+========================= */
+
+.empty-state {
+    background-color: white;
+    padding: 50px;
+    text-align: center;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.empty-state p {
+    color: #6b7280;
+}
+
+/* =========================
+   Pagination
+========================= */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.pagination button {
+    min-width: 110px;
+}
+
+.pagination button:disabled {
+    background-color: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* =========================
+   Authentication Pages
+========================= */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f7fb;
+    padding: 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.auth-logo {
+    text-align: center;
+    color: #2563eb;
+    margin-bottom: 30px;
+}
+
+.auth-card h2 {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+}
+
+.auth-button {
+    width: 100%;
+    margin-top: 5px;
+    padding: 12px;
+}
+
+.error-message {
+    color: #dc2626;
+    background-color: #fee2e2;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin: 0;
+}
+
+.auth-footer {
+    text-align: center;
+    color: #6b7280;
+    margin-top: 25px;
+    margin-bottom: 0;
+}
+
+.link-button {
+    padding: 0;
+    background: none;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.link-button:hover {
+    background: none;
+    text-decoration: underline;
+}
+
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 1000px) {
+    .stats-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 800px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-header {
+        padding: 20px;
+    }
+
+    .dashboard-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .job-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-container {
+        flex-direction: column;
+    }
+
+    .job-actions {
+        width: 100%;
+    }
+
+    .job-actions button {
+        flex: 1;
+    }
+
+    .dashboard-content {
+        padding: 25px 15px;
+    }
+
+    .auth-card {
+        padding: 30px 20px;
+    }
+
+    .pagination {
+        gap: 10px;
+    }
+
+    .pagination button {
+        min-width: auto;
+        padding: 9px 12px;
+    }
+}
