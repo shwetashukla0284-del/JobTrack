@@ -1,29 +1,26 @@
 # JobTrack
 
-A full-stack MERN application for tracking and managing job applications in one place.
+JobTrack is a full-stack MERN application designed to help users track, organize, and manage their job applications through a centralized dashboard.
 
-## 🚀 Live Demo
+## Live Demo
 
-👉 [Visit JobTrack](https://job-track-iota-five.vercel.app)
+[Visit JobTrack](https://job-track-iota-five.vercel.app)
 
-## 📌 Features
+## Features
 
 - User registration and login
 - JWT-based authentication
 - Secure password hashing using bcrypt
-- Add job applications
-- Edit job applications
-- Delete job applications
-- View all personal job applications
-- Search jobs by company, role, or location
+- Create, edit, and delete job applications
+- View and manage personal job applications
+- Search applications by company, role, or location
 - Filter applications by status
-- Pagination
-- Dashboard statistics
-- Protected routes
-- User-specific job data
+- Pagination for efficient data navigation
+- Dashboard statistics for application tracking
+- Protected routes and user-specific data access
 - Responsive user interface
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - React.js
@@ -35,7 +32,7 @@ A full-stack MERN application for tracking and managing job applications in one 
 ### Backend
 - Node.js
 - Express.js
-- JWT
+- JSON Web Tokens (JWT)
 - bcryptjs
 - Mongoose
 
@@ -47,7 +44,7 @@ A full-stack MERN application for tracking and managing job applications in one 
 - Render — Backend
 - MongoDB Atlas — Database
 
-## 📊 Job Statuses
+## Application Statuses
 
 JobTrack supports four application statuses:
 
@@ -56,7 +53,7 @@ JobTrack supports four application statuses:
 - Offer
 - Rejected
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```text
 JobTracker/
@@ -81,3 +78,4 @@ JobTracker/
 │
 ├── .gitignore
 └── README.md
+```
