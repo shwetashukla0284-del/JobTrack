@@ -8,7 +8,8 @@ hypothesis test, response-time analysis, and the same KPIs reproduced in SQL.
 |---|---|
 | [`job_search_analysis.ipynb`](job_search_analysis.ipynb) | The analysis, step by step, with explanations |
 | [`insights.md`](insights.md) | Write-up template: findings, recommendations, limitations |
-| [`generate_synthetic_data.py`](generate_synthetic_data.py) | Creates made-up practice data in the export format |
+| [`generate_synthetic_data.py`](generate_synthetic_data.py) | Creates made-up practice data in the export format (`--n`, `--seed`, `--clean`, `--out`) |
+| [`evaluate_methods.py`](evaluate_methods.py) → [`method_evaluation.md`](method_evaluation.md) | Tests the statistical methods on 1,000s of simulated searches with a known answer: accuracy, confidence-interval coverage, test power and sample-size planning |
 | `data/raw/` | Put your real exports here (never committed to git) |
 | `data/synthetic/` | Synthetic practice data |
 | `outputs/` | Cleaned data, KPIs and charts written by the notebook (not committed) |

@@ -1,7 +1,8 @@
 """
 Generate SYNTHETIC JobTrack export files for practice.
 
-    python generate_synthetic_data.py
+    python generate_synthetic_data.py                 # the default practice dataset
+    python generate_synthetic_data.py --n 200 --seed 7 --out data/synthetic_large
 
 Writes two CSV files to data/synthetic/ with exactly the same columns and
 format as the app's "Export CSV" buttons, so the notebook works the same way
@@ -22,6 +23,7 @@ so the cleaning steps have something real to do:
   - one impossible date (a reply before the application was sent)
 """
 
+import argparse
 import csv
 import random
 from datetime import date, datetime, timedelta, timezone
@@ -133,42 +135,53 @@ def make_application(rng):
     }
 
 
-def main():
-    rng = random.Random(SEED)
-    jobs = [make_application(rng) for _ in range(N_APPLICATIONS)]
+def generate(seed=SEED, n=N_APPLICATIONS, messy=True):
+    """Return a list of synthetic applications (dicts with an "events" list).
 
-    # Data-entry problem 0: the same companies spelled different ways
-    for job, spelling in zip(jobs[10:], COMPANY_VARIANTS):
-        job["company"] = spelling
+    messy=False skips the planted data-entry problems, for evaluating the
+    statistics on clean data (see evaluate_methods.py).
+    """
+    rng = random.Random(seed)
+    jobs = [make_application(rng) for _ in range(n)]
 
-    # Data-entry problem 1: two applications logged twice
-    for original in rng.sample(jobs, 2):
-        copy = dict(original, job_id=new_id(rng),
-                    created_at=original["created_at"] + timedelta(minutes=3))
-        copy["updated_at"] = max(copy["updated_at"], copy["created_at"])
-        jobs.append(copy)
+    if messy:
+        # Data-entry problem 0: the same companies spelled different ways
+        for job, spelling in zip(jobs[10:], COMPANY_VARIANTS):
+            job["company"] = spelling
 
-    # Data-entry problem 2: same-day reply early in the morning (IST), which
-    # is the previous day in UTC -> computes as -1 day
-    early = jobs[0]
-    early["events"] = [early["events"][0],
-                       ("Rejected", early["events"][0][1] - timedelta(hours=3, minutes=30))]
-    early["current_status"] = "Rejected"
+        # Data-entry problem 1: two applications logged twice
+        for original in rng.sample(jobs, 2):
+            copy = dict(original, job_id=new_id(rng),
+                        created_at=original["created_at"] + timedelta(minutes=3))
+            copy["updated_at"] = max(copy["updated_at"], copy["created_at"])
+            jobs.append(copy)
 
-    # Data-entry problem 3: impossible date (reply 9 days before applying)
-    wrong = jobs[1]
-    wrong["events"] = [wrong["events"][0],
-                       ("Rejected", wrong["events"][0][1] - timedelta(days=9))]
-    wrong["current_status"] = "Rejected"
+        # Data-entry problem 2: same-day reply early in the morning (IST), which
+        # is the previous day in UTC -> computes as -1 day
+        early = jobs[0]
+        early["events"] = [early["events"][0],
+                           ("Rejected", early["events"][0][1] - timedelta(hours=3, minutes=30))]
+        early["current_status"] = "Rejected"
+
+        # Data-entry problem 3: impossible date (reply 9 days before applying)
+        wrong = jobs[1]
+        wrong["events"] = [wrong["events"][0],
+                           ("Rejected", wrong["events"][0][1] - timedelta(days=9))]
+        wrong["current_status"] = "Rejected"
 
     for job in jobs:
         job["updated_at"] = max([job["created_at"]] + [m for _, m in job["events"]])
 
     jobs.sort(key=lambda job: (job["date_applied"], job["job_id"]))
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    return jobs
+
+
+def write_csv(jobs, out_dir):
+    """Write the two files in exactly the app's export format."""
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     # utf-8-sig + \r\n: the same encoding and line endings as the app's export
-    with open(OUT_DIR / "jobtrack_applications_SYNTHETIC.csv", "w",
+    with open(out_dir / "jobtrack_applications_SYNTHETIC.csv", "w",
               newline="", encoding="utf-8-sig") as file:
         writer = csv.writer(file, lineterminator="\r\n")
         writer.writerow(["job_id", "company", "role", "location", "source",
@@ -179,7 +192,7 @@ def main():
                              job["date_applied"].isoformat(),
                              iso(job["created_at"]), iso(job["updated_at"])])
 
-    with open(OUT_DIR / "jobtrack_status_events_SYNTHETIC.csv", "w",
+    with open(out_dir / "jobtrack_status_events_SYNTHETIC.csv", "w",
               newline="", encoding="utf-8-sig") as file:
         writer = csv.writer(file, lineterminator="\r\n")
         writer.writerow(["job_id", "event_number", "status", "changed_at"])
@@ -187,8 +200,21 @@ def main():
             for number, (status, moment) in enumerate(job["events"], start=1):
                 writer.writerow([job["job_id"], number, status, iso(moment)])
 
+
+def main():
+    parser = argparse.ArgumentParser(description="Generate SYNTHETIC JobTrack export files.")
+    parser.add_argument("--seed", type=int, default=SEED, help=f"random seed (default {SEED})")
+    parser.add_argument("--n", type=int, default=N_APPLICATIONS,
+                        help=f"number of applications (default {N_APPLICATIONS})")
+    parser.add_argument("--clean", action="store_true", help="skip the planted data-entry problems")
+    parser.add_argument("--out", type=Path, default=OUT_DIR, help="output folder")
+    args = parser.parse_args()
+
+    jobs = generate(seed=args.seed, n=args.n, messy=not args.clean)
+    write_csv(jobs, args.out)
+
     events = sum(len(job["events"]) for job in jobs)
-    print(f"SYNTHETIC data written to {OUT_DIR}: "
+    print(f"SYNTHETIC data written to {args.out}: "
           f"{len(jobs)} applications, {events} status events")
 
 

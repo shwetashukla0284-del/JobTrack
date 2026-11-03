@@ -167,6 +167,16 @@ The KPIs are implemented **three independent ways**, and they agree:
 On the synthetic dataset, loading the same CSVs into the app and comparing gives identical
 results on all 13 compared KPIs, including the timezone rule, the excluded impossible date and the rounding.
 
+**Method evaluation.** Real data never comes with the true answer, so the statistical methods
+are also checked on thousands of simulated job searches where the truth is known
+([`analysis/method_evaluation.md`](analysis/method_evaluation.md)). The 95% confidence intervals
+contain the true rate about 95% of the time, the "mature applications only" rule removes most of
+the recency bias, and a power analysis shows how much data a channel comparison needs (for example,
+a 2x referral advantage needs 400–800 applications to be detected reliably), which is why the
+app and notebook present small-sample differences as directional.
+
+<img src="docs/images/power_curve.png" alt="Simulated power curves: chance of detecting a referral advantage by number of applications" width="560">
+
 **Backend tests:** 68 automated tests (`npm test`) against a temporary in-memory database,
 covering validation, access control between users, the funnel definitions on a hand-calculated
 dataset, CSV escaping and encoding, error handling, CORS and rate limiting. Re-introducing the
