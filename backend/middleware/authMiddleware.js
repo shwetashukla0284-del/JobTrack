@@ -16,9 +16,11 @@ const protect = (req, res, next) => {
         const token = authHeader.split(" ")[1];
 
         // Verify token
+        // Only accept the algorithm we sign with
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET,
+            { algorithms: ["HS256"] }
         );
 
         // Store user ID in request

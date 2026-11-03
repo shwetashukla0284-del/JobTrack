@@ -1,52 +1,38 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
+// Entry point: check configuration, connect to MongoDB, then start the API.
+
 require("dotenv").config();
 
-const authRoutes = require("./routes/authRoutes");
-const jobRoutes = require("./routes/jobRoutes");
-const protect = require("./middleware/authMiddleware");
+const mongoose = require("mongoose");
+const app = require("./app");
 
-console.log("MONGO_URI loaded:", !!process.env.MONGO_URI);
+const REQUIRED_ENV = ["MONGO_URI", "JWT_SECRET"];
 
-const app = express();
+const missing = REQUIRED_ENV.filter((name) => !process.env[name]);
 
-app.use(cors());
-app.use(express.json());
-
-// Authentication routes
-app.use("/api/auth", authRoutes);
-
-// Job application routes
-app.use("/api/jobs", jobRoutes);
-
-// MongoDB connection
-mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log("MongoDB connected");
-    })
-    .catch((error) => {
-        console.log("MongoDB connection error:", error.message);
-    });
-
-// Test route
-app.get("/", (req, res) => {
-    res.json({
-        message: "JobTrack API is running"
-    });
-});
-
-// Protected test route
-app.get("/api/protected", protect, (req, res) => {
-    res.json({
-        message: "You accessed a protected route!",
-        userId: req.userId
-    });
-});
+if (missing.length > 0) {
+    console.error(
+        `Missing required environment variables: ${missing.join(", ")}. ` +
+        "Copy backend/.env.example to backend/.env and fill them in."
+    );
+    process.exit(1);
+}
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const start = async () => {
+    try {
+        // Connect first, so the API never accepts requests it can't serve
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log("MongoDB connected");
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+
+    } catch (error) {
+        console.error("MongoDB connection error:", error.message);
+        process.exit(1);
+    }
+};
+
+start();

@@ -1,97 +1,132 @@
 import { useEffect, useState } from "react";
-import api from "../api";
 import { useNavigate } from "react-router-dom";
+import api, { getErrorMessage } from "../api";
+import { clearSession, getUser } from "../auth";
+import { JOB_STATUSES, formatDate } from "../constants";
+
+const SEARCH_DEBOUNCE_MS = 300;
 
 function Dashboard() {
     const [jobs, setJobs] = useState([]);
+    // What the user is typing vs. the (debounced) value sent to the API
+    const [searchInput, setSearchInput] = useState("");
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("All");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
     const [statistics, setStatistics] = useState({
-        totalApplications: 0,
-        totalApplied: 0,
-        totalInterviews: 0,
-        totalOffers: 0,
-        totalRejected: 0,
-        interviewRate: 0,
-        offerRate: 0
+        applications: 0,
+        awaitingResponse: 0,
+        reachedInterview: 0,
+        reachedOffer: 0,
+        rejected: 0,
+        responseRate: null,
+        interviewRate: null,
+        offerRate: null
     });
 
     const [errorMessage, setErrorMessage] = useState("");
     const [refresh, setRefresh] = useState(0);
+    // true until the first response arrives, so "No applications" never flashes
+    const [loading, setLoading] = useState(true);
+    const [deletingId, setDeletingId] = useState(null);
 
     const jobsPerPage = 5;
 
     const navigate = useNavigate();
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = getUser();
+
+    // =========================
+    // DEBOUNCE SEARCH
+    // Wait until the user stops typing, then search from page 1
+    // =========================
+
+    useEffect(() => {
+        const nextSearch = searchInput.trim();
+
+        if (nextSearch === search) {
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setSearch(nextSearch);
+            setCurrentPage(1);
+        }, SEARCH_DEBOUNCE_MS);
+
+        return () => clearTimeout(timer);
+
+    }, [searchInput, search]);
+
 
     // =========================
     // FETCH JOBS
     // =========================
 
     useEffect(() => {
+        // Ignore responses from outdated requests, so a slow earlier
+        // response can't overwrite newer results
+        let ignore = false;
+
         const fetchJobs = async () => {
             try {
-                setErrorMessage("");
-
-                const token = localStorage.getItem("token");
-
-                const response = await api.get(
-                    "/jobs",
-                    {
-                        params: {
-                            search,
-                            status: statusFilter,
-                            page: currentPage,
-                            limit: jobsPerPage
-                        },
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
+                const response = await api.get("/jobs", {
+                    params: {
+                        search,
+                        status: statusFilter,
+                        page: currentPage,
+                        limit: jobsPerPage
                     }
-                );
+                });
 
+                if (ignore) {
+                    return;
+                }
+
+                // e.g. after deleting the only job on the last page
+                if (
+                    response.data.totalPages > 0 &&
+                    currentPage > response.data.totalPages
+                ) {
+                    setCurrentPage(response.data.totalPages);
+                    return;
+                }
+
+                setErrorMessage("");
                 setJobs(response.data.jobs);
-
-                setTotalPages(
-                    response.data.totalPages
-                );
-
-                setStatistics(
-                    response.data.statistics
-                );
+                setTotalPages(response.data.totalPages);
+                setStatistics(response.data.statistics);
+                setLoading(false);
 
             } catch (error) {
-                if (error.response?.status === 401) {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
+                if (ignore) {
+                    return;
+                }
 
-                    navigate("/login");
+                const message = getErrorMessage(
+                    error,
+                    "Unable to load your job applications. Please try again."
+                );
 
-                } else if (error.response) {
-                    setErrorMessage(
-                        "Unable to load your job applications. Please try again."
-                    );
-
-                } else {
-                    setErrorMessage(
-                        "Unable to connect to the server. Please check your connection."
-                    );
+                if (message) {
+                    setErrorMessage(message);
+                    setLoading(false);
                 }
             }
         };
 
         fetchJobs();
 
+        return () => {
+            ignore = true;
+        };
+
     }, [
         search,
         statusFilter,
         currentPage,
-        refresh,
-        navigate
+        refresh
     ]);
 
 
@@ -100,9 +135,7 @@ function Dashboard() {
     // =========================
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-
+        clearSession();
         navigate("/login");
     };
 
@@ -111,58 +144,99 @@ function Dashboard() {
     // DELETE JOB
     // =========================
 
-    const deleteJob = async (id) => {
+    const deleteJob = async (job) => {
+        const confirmed = window.confirm(
+            `Delete your application to ${job.company} (${job.role})? This can't be undone.`
+        );
+
+        if (!confirmed || deletingId) {
+            return;
+        }
+
+        setErrorMessage("");
+        setDeletingId(job._id);
+
         try {
-            setErrorMessage("");
-
-            const token = localStorage.getItem("token");
-
-            await api.delete(
-                `/jobs/${id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+            await api.delete(`/jobs/${job._id}`);
 
             // Refresh jobs and statistics
             setRefresh((value) => value + 1);
 
         } catch (error) {
-            if (error.response?.status === 401) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
+            const message = getErrorMessage(
+                error,
+                "Unable to delete the job application. Please try again."
+            );
 
-                navigate("/login");
-
-            } else if (error.response?.status === 404) {
-                setErrorMessage(
-                    "Job application not found."
-                );
-
-            } else if (error.response) {
-                setErrorMessage(
-                    "Unable to delete the job application. Please try again."
-                );
-
-            } else {
-                setErrorMessage(
-                    "Unable to connect to the server. Please try again."
-                );
+            if (message) {
+                setErrorMessage(message);
             }
+
+        } finally {
+            setDeletingId(null);
         }
     };
 
 
     // =========================
-    // RESET PAGE WHEN SEARCH
-    // OR FILTER CHANGES
+    // FILTER CHANGE
+    // Start again from page 1
     // =========================
 
-    useEffect(() => {
+    const handleStatusFilterChange = (event) => {
+        setStatusFilter(event.target.value);
         setCurrentPage(1);
-    }, [search, statusFilter]);
+    };
+
+    const isFiltering = search !== "" || statusFilter !== "All";
+
+    // A rate is null when there are no applications yet ("no data", not 0%)
+    const formatRate = (value) =>
+        value === null || value === undefined ? "—" : `${value}%`;
+
+    // Definitions match docs/metrics.md
+    const statCards = [
+        {
+            label: "Total Applications",
+            value: statistics.applications,
+            definition: "All applications you have logged"
+        },
+        {
+            label: "Awaiting Response",
+            value: statistics.awaitingResponse,
+            definition: "Current status is still Applied"
+        },
+        {
+            label: "Interviewed",
+            value: statistics.reachedInterview,
+            definition: "Applications that ever reached the Interview stage (including ones that later got an offer or were rejected)"
+        },
+        {
+            label: "Offers",
+            value: statistics.reachedOffer,
+            definition: "Applications that ever reached the Offer stage"
+        },
+        {
+            label: "Rejected",
+            value: statistics.rejected,
+            definition: "Current status is Rejected"
+        },
+        {
+            label: "Response Rate",
+            value: formatRate(statistics.responseRate),
+            definition: "Share of applications that got any reply (moved past Applied, including rejections)"
+        },
+        {
+            label: "Interview Rate",
+            value: formatRate(statistics.interviewRate),
+            definition: "Interviewed ÷ Total Applications"
+        },
+        {
+            label: "Offer Rate",
+            value: formatRate(statistics.offerRate),
+            definition: "Offers ÷ Total Applications"
+        }
+    ];
 
 
     return (
@@ -186,12 +260,21 @@ function Dashboard() {
                     )}
                 </div>
 
-                <button
-                    className="logout-button"
-                    onClick={handleLogout}
-                >
-                    Logout
-                </button>
+                <div className="header-actions">
+                    <button
+                        className="secondary-button"
+                        onClick={() => navigate("/analytics")}
+                    >
+                        📊 Analytics
+                    </button>
+
+                    <button
+                        className="logout-button"
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </button>
+                </div>
 
             </header>
 
@@ -241,76 +324,20 @@ function Dashboard() {
                 ========================= */}
 
                 <div className="stats-container">
-
-                    <div className="stat-card">
-                        <h3>
-                            {statistics.totalApplications}
-                        </h3>
-                        <p>
-                            Total Applications
-                        </p>
-                    </div>
-
-
-                    <div className="stat-card">
-                        <h3>
-                            {statistics.totalApplied}
-                        </h3>
-                        <p>
-                            Applied
-                        </p>
-                    </div>
-
-
-                    <div className="stat-card">
-                        <h3>
-                            {statistics.totalInterviews}
-                        </h3>
-                        <p>
-                            Interviews
-                        </p>
-                    </div>
-
-
-                    <div className="stat-card">
-                        <h3>
-                            {statistics.totalOffers}
-                        </h3>
-                        <p>
-                            Offers
-                        </p>
-                    </div>
-
-
-                    <div className="stat-card">
-                        <h3>
-                            {statistics.totalRejected}
-                        </h3>
-                        <p>
-                            Rejected
-                        </p>
-                    </div>
-
-
-                    <div className="stat-card">
-                        <h3>
-                            {statistics.interviewRate}%
-                        </h3>
-                        <p>
-                            Interview Rate
-                        </p>
-                    </div>
-
-
-                    <div className="stat-card">
-                        <h3>
-                            {statistics.offerRate}%
-                        </h3>
-                        <p>
-                            Offer Rate
-                        </p>
-                    </div>
-
+                    {statCards.map((card) => (
+                        <div
+                            className="stat-card"
+                            key={card.label}
+                            title={card.definition}
+                        >
+                            <h3>
+                                {card.value}
+                            </h3>
+                            <p>
+                                {card.label}
+                            </p>
+                        </div>
+                    ))}
                 </div>
 
 
@@ -323,38 +350,26 @@ function Dashboard() {
                     <input
                         type="text"
                         placeholder="Search company, role, or location..."
-                        value={search}
+                        value={searchInput}
                         onChange={(event) =>
-                            setSearch(event.target.value)
+                            setSearchInput(event.target.value)
                         }
                     />
 
                     <select
                         value={statusFilter}
-                        onChange={(event) =>
-                            setStatusFilter(event.target.value)
-                        }
+                        onChange={handleStatusFilterChange}
                     >
 
                         <option value="All">
                             All Statuses
                         </option>
 
-                        <option value="Applied">
-                            Applied
-                        </option>
-
-                        <option value="Interview">
-                            Interview
-                        </option>
-
-                        <option value="Offer">
-                            Offer
-                        </option>
-
-                        <option value="Rejected">
-                            Rejected
-                        </option>
+                        {JOB_STATUSES.map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
 
                     </select>
 
@@ -367,7 +382,13 @@ function Dashboard() {
 
                 <div className="jobs-container">
 
-                    {jobs.length === 0 ? (
+                    {loading ? (
+
+                        <p className="loading-text">
+                            Loading your applications…
+                        </p>
+
+                    ) : jobs.length === 0 ? (
 
                         <div className="empty-state">
 
@@ -376,7 +397,9 @@ function Dashboard() {
                             </h3>
 
                             <p>
-                                Add a job application to get started.
+                                {isFiltering
+                                    ? "Try a different search or status filter."
+                                    : "Add a job application to get started."}
                             </p>
 
                         </div>
@@ -406,6 +429,13 @@ function Dashboard() {
                                             "Not specified"}
                                     </p>
 
+                                    <p>
+                                        🗓️ Applied{" "}
+                                        {formatDate(job.dateApplied)}
+                                        {job.source &&
+                                            ` · via ${job.source}`}
+                                    </p>
+
                                     <span
                                         className={`status status-${job.status.toLowerCase()}`}
                                     >
@@ -429,11 +459,14 @@ function Dashboard() {
 
                                     <button
                                         className="delete-button"
+                                        disabled={deletingId === job._id}
                                         onClick={() =>
-                                            deleteJob(job._id)
+                                            deleteJob(job)
                                         }
                                     >
-                                        Delete
+                                        {deletingId === job._id
+                                            ? "Deleting…"
+                                            : "Delete"}
                                     </button>
 
                                 </div>

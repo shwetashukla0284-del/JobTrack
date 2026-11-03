@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
+import { isLoggedIn } from "./auth";
 
+// Pages that need a valid (unexpired) login
 function ProtectedRoute({ children }) {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        return <Navigate to="/login" />;
+    if (!isLoggedIn()) {
+        return <Navigate to="/login" replace />;
     }
 
     return children;

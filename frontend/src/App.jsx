@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import {
     BrowserRouter,
     Routes,
@@ -10,7 +11,13 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import AddJob from "./pages/AddJob";
 import EditJob from "./pages/EditJob";
+import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./ProtectedRoute";
+import PublicOnlyRoute from "./PublicOnlyRoute";
+
+// Loaded only when opened, so the charting library doesn't slow down
+// the login page and dashboard
+const Analytics = lazy(() => import("./pages/Analytics"));
 
 function App() {
     return (
@@ -19,12 +26,20 @@ function App() {
 
                 <Route
                     path="/login"
-                    element={<Login />}
+                    element={
+                        <PublicOnlyRoute>
+                            <Login />
+                        </PublicOnlyRoute>
+                    }
                 />
 
                 <Route
                     path="/register"
-                    element={<Register />}
+                    element={
+                        <PublicOnlyRoute>
+                            <Register />
+                        </PublicOnlyRoute>
+                    }
                 />
 
                 <Route
@@ -55,8 +70,25 @@ function App() {
                 />
 
                 <Route
+                    path="/analytics"
+                    element={
+                        <ProtectedRoute>
+                            <Suspense fallback={<p className="loading-text">Loading…</p>}>
+                                <Analytics />
+                            </Suspense>
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* "/" -> dashboard if logged in, otherwise ProtectedRoute sends to login */}
+                <Route
                     path="/"
-                    element={<Navigate to="/login" />}
+                    element={<Navigate to="/dashboard" replace />}
+                />
+
+                <Route
+                    path="*"
+                    element={<NotFound />}
                 />
 
             </Routes>

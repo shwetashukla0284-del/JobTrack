@@ -1,0 +1,63 @@
+﻿job_id,company,role,location,source,current_status,date_applied,created_at,updated_at
+bd4755d05ad7853c1f76eb97,Lumen Education,Junior Data Analyst,Pune,Company Website,Rejected,2026-08-25,2026-08-25T17:36:00.000Z,2026-09-11T04:27:00.000Z
+ff6c15c0c8e9df469611a11f,Fernway Pharma,Data Analyst,Pune,LinkedIn,Applied,2026-08-25,2026-08-25T13:56:00.000Z,2026-08-25T13:56:00.000Z
+5fe85df2fbdaa35adf9c1e2a,Brightwater Studios,Business Analyst,Remote,LinkedIn,Applied,2026-08-26,2026-08-26T16:32:00.000Z,2026-08-26T16:32:00.000Z
+7a9ceb98bfe3fa6bad17408d,Brightwater Studios,Business Analyst,Remote,LinkedIn,Applied,2026-08-26,2026-08-26T16:35:00.000Z,2026-08-26T16:35:00.000Z
+dc77eb48631d076231e171ce,Ember Robotics,Junior Data Analyst,Mumbai,Recruiter,Applied,2026-08-26,2026-08-27T18:16:00.000Z,2026-08-27T18:16:00.000Z
+e24bca87305fc388e69f6342,Granite Telecom,Data analyst,Bangalore,Job Board,Applied,2026-08-28,2026-08-29T14:53:00.000Z,2026-08-29T14:53:00.000Z
+0474f36e8b5359309cc62739,QUANTIA LABS,Data Analyst,Pune,Recruiter,Applied,2026-08-29,2026-08-29T14:23:00.000Z,2026-08-29T14:23:00.000Z
+ee9d9136682575250def9179,Atlas Fintech,Business Analyst,,LinkedIn,Rejected,2026-08-30,2026-08-30T16:54:00.000Z,2026-10-01T13:08:00.000Z
+3fe22a4248ac9ed336de7dae,Northwind Analytics,data analyst,Remote,Company Website,Applied,2026-08-31,2026-09-01T16:13:00.000Z,2026-09-01T16:13:00.000Z
+5df1bcadd49c5f7794e1dd4c,Ember Robotics,Junior Data Analyst,Hyderabad,Referral,Offer,2026-08-31,2026-08-31T14:33:00.000Z,2026-09-12T14:03:00.000Z
+54d134955a7b92868492545a,Atlas Fintech,Data Analyst,Pune,,Applied,2026-09-02,2026-09-04T14:38:00.000Z,2026-09-04T14:38:00.000Z
+cd93c0a5eb2d37dc2c9a7a52,Jetstream Air,Data Analyst,Mumbai,LinkedIn,Applied,2026-09-02,2026-09-04T16:06:00.000Z,2026-09-04T16:06:00.000Z
+7717713daf3405dff69a9127,Harbor Insurance,Data Analyst,Bangalore,LinkedIn,Rejected,2026-09-03,2026-09-03T13:36:00.000Z,2026-09-24T08:29:00.000Z
+29955b73647f0bbe4229cfdd,Pinecrest Bank,Data Analyst,Bangalore,,Applied,2026-09-04,2026-09-04T17:52:00.000Z,2026-09-04T17:52:00.000Z
+258e4d27eb0d1cb7c2b70a3a,Fernway Pharma,Data Analyst,Bangalore,,Applied,2026-09-06,2026-09-08T12:48:00.000Z,2026-09-08T12:48:00.000Z
+2c083eb8cb37f0a72e9d3411,Kestrel Foods,Business Analyst,,Referral,Rejected,2026-09-07,2026-09-08T16:53:00.000Z,2026-09-08T16:53:00.000Z
+5aa65fef9f02ce76b119ff90,Pinecrest Bank,Data Analyst,Remote,LinkedIn,Rejected,2026-09-08,2026-09-09T14:25:00.000Z,2026-09-13T07:54:00.000Z
+9b62179273c8eb5bb682575e,Fernway Pharma,data analyst,Hyderabad,Referral,Rejected,2026-09-08,2026-09-09T13:05:00.000Z,2026-09-09T13:05:00.000Z
+b590481194f309ffea518f32,Kestrel Foods,data analyst,,Referral,Rejected,2026-09-08,2026-09-08T14:44:00.000Z,2026-09-23T12:48:00.000Z
+5e1db7e9e779f6bee9cd5648,Juniper Commerce,Data Analyst,,,Applied,2026-09-09,2026-09-09T13:41:00.000Z,2026-09-09T13:41:00.000Z
+6daeee6f529a279764017f2e,northwind analytics,data analyst,Mumbai,Referral,Rejected,2026-09-09,2026-09-09T14:48:00.000Z,2026-09-29T07:55:00.000Z
+c02d4e518ca6eaac8d82f01b,Quantia Labs,Junior Data Analyst,Bengaluru,Recruiter,Applied,2026-09-09,2026-09-11T13:28:00.000Z,2026-09-11T13:28:00.000Z
+3fd81b6ee7b3bb1c863e2601,Tidewater Logistics,Product Analyst,Mumbai,LinkedIn,Rejected,2026-09-10,2026-09-10T16:11:00.000Z,2026-09-17T15:04:00.000Z
+f9f0ba3d90f871f5c471360e,Mosaic Travel,Product Analyst,Remote,Company Website,Rejected,2026-09-10,2026-09-12T15:02:00.000Z,2026-09-23T13:17:00.000Z
+2eb2618c1266f6a90663f76c,Northwind Analytics Inc.,data analyst,Bangalore,LinkedIn,Applied,2026-09-12,2026-09-12T15:59:00.000Z,2026-09-12T15:59:00.000Z
+aed16dc0cf0b9cd7f78df0ca,Northwind Analytics Inc.,data analyst,Bangalore,LinkedIn,Applied,2026-09-12,2026-09-12T15:56:00.000Z,2026-09-12T15:56:00.000Z
+f591093a9ef4e863a5e850a9,Glacier Water,Junior Data Analyst,Bangalore,Job Board,Applied,2026-09-15,2026-09-15T16:20:00.000Z,2026-09-15T16:20:00.000Z
+12da86a78c49ea20e32684b2,Larkspur Health,Junior Data Analyst,Remote,,Rejected,2026-09-16,2026-09-18T14:07:00.000Z,2026-09-18T14:07:00.000Z
+a99ed5ebe1bd812cb504e142,Glacier Water,Junior Data Analyst,Remote,Company Website,Applied,2026-09-16,2026-09-16T12:35:00.000Z,2026-09-16T12:35:00.000Z
+7d1afcc4f14a3e3e04d42f8a,Hollow Oak Games,data analyst,Bengaluru,,Applied,2026-09-17,2026-09-17T16:54:00.000Z,2026-09-17T16:54:00.000Z
+cf8169b1a83bdceca5ffb82d,Bluepeak Retail,Data Analyst,Remote,LinkedIn,Applied,2026-09-18,2026-09-18T15:02:00.000Z,2026-09-18T15:02:00.000Z
+853040b7a05814d32feb3e71,Foxglove Fashion,Business Analyst,,,Rejected,2026-09-19,2026-09-19T14:04:00.000Z,2026-10-07T03:47:00.000Z
+a5eab8f67897996fafb893cc,Cobalt Gaming,Product Analyst,Bangalore,LinkedIn,Rejected,2026-09-19,2026-09-20T16:54:00.000Z,2026-10-14T11:43:00.000Z
+1ac826a6fce48478dcb74f21,Atlas Fintech,Data Analyst,Bangalore,,Applied,2026-09-21,2026-09-21T14:22:00.000Z,2026-09-21T14:22:00.000Z
+e8e80e952eb9d8e96cf37cb9,Ironbark Energy,Business Analyst,Pune,Company Website,Applied,2026-09-23,2026-09-25T13:44:00.000Z,2026-09-25T13:44:00.000Z
+1db212f19d54dbcecc24b35c,Ironbark Energy,Data Analyst,Mumbai,Referral,Applied,2026-09-25,2026-09-25T16:34:00.000Z,2026-09-25T16:34:00.000Z
+0f99f7c9e215edfe6a4aabc4,Atlas Fintech,Product Analyst,Bengaluru,LinkedIn,Applied,2026-09-26,2026-09-28T16:09:00.000Z,2026-09-28T16:09:00.000Z
+6d3748421599e3e9c8fe21da,Tidewater Logistics,Business Analyst,Pune,LinkedIn,Applied,2026-09-26,2026-09-28T18:21:00.000Z,2026-09-28T18:21:00.000Z
+026706d7e805da846a32c3bb,Northwind Analytics,Business Analyst,Pune,Company Website,Rejected,2026-09-28,2026-09-30T15:32:00.000Z,2026-09-30T15:32:00.000Z
+7df7ffe0297c79bfbdabe898,Cobalt Gaming,Junior Data Analyst,Bengaluru,,Applied,2026-09-28,2026-09-30T13:35:00.000Z,2026-09-30T13:35:00.000Z
+1e6af41e3a2517ee5bb9cda1,Glacier Water,Product Analyst,Bengaluru,LinkedIn,Rejected,2026-09-29,2026-09-30T17:05:00.000Z,2026-10-25T13:08:00.000Z
+672eb231645ae36f2e1e4de1,Atlas Fintech,Data analyst,Hyderabad,Referral,Rejected,2026-09-30,2026-10-01T17:21:00.000Z,2026-10-16T08:56:00.000Z
+9348334896a68f812d810a48,Pinecrest Bank,Data Analyst,,LinkedIn,Applied,2026-10-01,2026-10-03T13:12:00.000Z,2026-10-03T13:12:00.000Z
+44f58d669cbee3772a077021,Glacier Water,Junior Data Analyst,Bengaluru,,Rejected,2026-10-02,2026-10-02T17:19:00.000Z,2026-10-07T04:35:00.000Z
+4c24026cdea5b9a2145128ed,Ember Robotics,Data analyst,,LinkedIn,Applied,2026-10-02,2026-10-02T12:41:00.000Z,2026-10-02T12:41:00.000Z
+33dbdde131ca3766e4d58e72,Hollow Oak Games,Data analyst,Bengaluru,,Offer,2026-10-05,2026-10-06T15:42:00.000Z,2026-10-24T13:00:00.000Z
+813dbad3c681d06bd2aa399d,Northwind Analytics,Product Analyst,Remote,Referral,Rejected,2026-10-05,2026-10-05T14:41:00.000Z,2026-10-21T11:51:00.000Z
+4865425feeaa4e2fe981b29e,Vantage Mobility,Data analyst,Pune,,Applied,2026-10-07,2026-10-07T13:36:00.000Z,2026-10-07T13:36:00.000Z
+16b92ce8343cbab46c1114af,Sundial Media,Data analyst,Bangalore,LinkedIn,Applied,2026-10-09,2026-10-09T12:55:00.000Z,2026-10-09T12:55:00.000Z
+d58fed8a728e7eca0fa5f6b8,Quantia Labs Pvt Ltd,Product Analyst,Hyderabad,Job Board,Rejected,2026-10-10,2026-10-11T17:39:00.000Z,2026-10-20T09:53:00.000Z
+27972d33e5901a19bbd47d55,Hollow Oak Games,Data Analyst,Bengaluru,,Applied,2026-10-11,2026-10-12T16:32:00.000Z,2026-10-12T16:32:00.000Z
+c429ca42db0b956af6744293,Fernway Pharma,Data Analyst,Remote,LinkedIn,Offer,2026-10-12,2026-10-12T15:11:00.000Z,2026-11-03T13:12:00.000Z
+7b7684319e1b429ad564b858,Brightwater Studios,Data analyst,Hyderabad,,Rejected,2026-10-13,2026-10-14T15:19:00.000Z,2026-10-23T14:33:00.000Z
+c354fa708c7e8a908b713e95,Atlas Fintech,data analyst,Hyderabad,Company Website,Applied,2026-10-14,2026-10-16T14:35:00.000Z,2026-10-16T14:35:00.000Z
+ed16bfe16849ef307590d273,Ember Robotics,Data analyst,Bengaluru,LinkedIn,Applied,2026-10-14,2026-10-14T18:25:00.000Z,2026-10-14T18:25:00.000Z
+0cf1cb80b2b73a41ba5ef542,Tidewater Logistics,Data analyst,Pune,Company Website,Rejected,2026-10-16,2026-10-18T17:20:00.000Z,2026-10-31T08:34:00.000Z
+1a3dbd199b364f73bb387d08,Kestrel Foods,Data Analyst,Bangalore,Referral,Rejected,2026-10-17,2026-10-17T14:05:00.000Z,2026-10-25T04:35:00.000Z
+e8038a39d5e0853964b50af0,Foxglove Fashion,Data Analyst,Remote,Company Website,Applied,2026-10-17,2026-10-18T16:08:00.000Z,2026-10-18T16:08:00.000Z
+e020864d3979317de23f0749,Jetstream Air,data analyst,Pune,LinkedIn,Applied,2026-10-23,2026-10-23T18:00:00.000Z,2026-10-23T18:00:00.000Z
+3e4eaede5fe878f78e2978aa, Northwind Analytics ,Data Analyst,Bangalore,Referral,Rejected,2026-10-26,2026-10-28T14:28:00.000Z,2026-11-03T15:03:00.000Z
+8dff7e4c6428da8099f4efba,Copperleaf Finance,data analyst,,Company Website,Applied,2026-10-26,2026-10-26T17:15:00.000Z,2026-10-26T17:15:00.000Z
+917c10696489a30fd54c7b2c,Maple & Finch,Data Analyst,Remote,Job Board,Applied,2026-10-28,2026-10-29T17:12:00.000Z,2026-10-29T17:12:00.000Z

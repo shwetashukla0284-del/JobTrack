@@ -1,290 +1,95 @@
 import { useEffect, useState } from "react";
-import api from "../api";
 import { useNavigate, useParams } from "react-router-dom";
+import api, { getErrorMessage } from "../api";
+import JobForm from "../components/JobForm";
+import { toInputValue } from "../constants";
 
 function EditJob() {
-    const [company, setCompany] = useState("");
-    const [role, setRole] = useState("");
-    const [status, setStatus] = useState("Applied");
-    const [location, setLocation] = useState("");
+    const [job, setJob] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
 
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // =========================
-    // FETCH ONE JOB
-    // =========================
-
     useEffect(() => {
+        let ignore = false;
+
         const fetchJob = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const response = await api.get(`/jobs/${id}`);
+                const data = response.data.job;
 
-                const response = await api.get(
-                    `/jobs/${id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-
-                const job = response.data.job;
-
-                setCompany(job.company);
-                setRole(job.role);
-                setStatus(job.status);
-                setLocation(job.location || "");
+                if (!ignore) {
+                    setJob({
+                        company: data.company,
+                        role: data.role,
+                        status: data.status,
+                        source: data.source || "",
+                        location: data.location || "",
+                        dateApplied: toInputValue(data.dateApplied)
+                    });
+                }
 
             } catch (error) {
-                if (error.response?.status === 401) {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
+                const message = getErrorMessage(error);
 
-                    navigate("/login");
-
-                } else if (error.response?.status === 404) {
-                    setErrorMessage(
-                        "Job application not found."
-                    );
-
-                } else if (error.response) {
-                    setErrorMessage(
-                        "Something went wrong. Please try again."
-                    );
-
-                } else {
-                    setErrorMessage(
-                        "Unable to connect to the server. Please try again."
-                    );
+                if (!ignore && message) {
+                    setErrorMessage(message);
                 }
             }
         };
 
         fetchJob();
 
-    }, [id, navigate]);
+        return () => {
+            ignore = true;
+        };
 
+    }, [id]);
 
-    // =========================
-    // UPDATE JOB
-    // =========================
+    const updateJob = ({ dateApplied, ...values }) =>
+        api.put(`/jobs/${id}`, {
+            ...values,
+            // Older jobs may have no date; don't send an empty one
+            ...(dateApplied && { dateApplied })
+        });
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    // Show the form only once the job has loaded, so it never flashes empty
+    if (!job) {
+        return (
+            <div className="auth-page">
+                <div className="auth-card">
+                    <h1 className="auth-logo">JobTrack</h1>
 
-        setErrorMessage("");
+                    {errorMessage ? (
+                        <>
+                            <p className="error-message" role="alert">
+                                {errorMessage}
+                            </p>
 
-        try {
-            const token = localStorage.getItem("token");
-
-            await api.put(
-                `/jobs/${id}`,
-                {
-                    company,
-                    role,
-                    status,
-                    location
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-
-            navigate("/dashboard");
-
-        } catch (error) {
-            if (error.response?.status === 401) {
-
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-
-                navigate("/login");
-
-            } else if (error.response?.status === 404) {
-
-                setErrorMessage(
-                    "Job application not found."
-                );
-
-            } else if (error.response) {
-
-                setErrorMessage(
-                    "Something went wrong. Please try again."
-                );
-
-            } else {
-
-                setErrorMessage(
-                    "Unable to connect to the server. Please try again."
-                );
-            }
-        }
-    };
-
-
-    // =========================
-    // UI
-    // =========================
+                            <button
+                                className="link-button"
+                                onClick={() => navigate("/dashboard")}
+                            >
+                                Back to Dashboard
+                            </button>
+                        </>
+                    ) : (
+                        <p className="loading-text">Loading application…</p>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="auth-page">
-
-            <div className="auth-card">
-
-                <h1 className="auth-logo">
-                    JobTrack
-                </h1>
-
-                <h2>
-                    Edit Job Application
-                </h2>
-
-                <p className="auth-subtitle">
-                    Update your job application details
-                </p>
-
-
-                <form
-                    className="auth-form"
-                    onSubmit={handleSubmit}
-                >
-
-                    {/* Company */}
-
-                    <div className="form-group">
-
-                        <label>
-                            Company
-                        </label>
-
-                        <input
-                            type="text"
-                            value={company}
-                            onChange={(event) =>
-                                setCompany(event.target.value)
-                            }
-                            required
-                        />
-
-                    </div>
-
-
-                    {/* Role */}
-
-                    <div className="form-group">
-
-                        <label>
-                            Role
-                        </label>
-
-                        <input
-                            type="text"
-                            value={role}
-                            onChange={(event) =>
-                                setRole(event.target.value)
-                            }
-                            required
-                        />
-
-                    </div>
-
-
-                    {/* Status */}
-
-                    <div className="form-group">
-
-                        <label>
-                            Status
-                        </label>
-
-                        <select
-                            value={status}
-                            onChange={(event) =>
-                                setStatus(event.target.value)
-                            }
-                        >
-
-                            <option value="Applied">
-                                Applied
-                            </option>
-
-                            <option value="Interview">
-                                Interview
-                            </option>
-
-                            <option value="Offer">
-                                Offer
-                            </option>
-
-                            <option value="Rejected">
-                                Rejected
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    {/* Location */}
-
-                    <div className="form-group">
-
-                        <label>
-                            Location
-                        </label>
-
-                        <input
-                            type="text"
-                            value={location}
-                            onChange={(event) =>
-                                setLocation(event.target.value)
-                            }
-                            placeholder="e.g. Bangalore"
-                        />
-
-                    </div>
-
-
-                    {/* Error */}
-
-                    {errorMessage && (
-                        <p className="error-message">
-                            {errorMessage}
-                        </p>
-                    )}
-
-
-                    {/* Save */}
-
-                    <button
-                        className="auth-button"
-                        type="submit"
-                    >
-                        Save Changes
-                    </button>
-
-
-                    {/* Cancel */}
-
-                    <button
-                        type="button"
-                        className="link-button"
-                        onClick={() =>
-                            navigate("/dashboard")
-                        }
-                    >
-                        Cancel
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
+        <JobForm
+            title="Edit Job Application"
+            subtitle="Update your job application details"
+            submitLabel="Save Changes"
+            initialValues={job}
+            onSubmit={updateJob}
+        />
     );
 }
 

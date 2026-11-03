@@ -1,0 +1,9 @@
+# Python packages for the JobTrack analysis.
+# Install with:  pip install -r requirements.txt
+pandas==3.1.0       # tables (DataFrames): load, clean, group, join
+duckdb==2.0.0       # run SQL directly on CSV files and DataFrames
+matplotlib==3.11.2  # charts
+scipy==1.18.1       # statistical tests
+jupyter==1.1.1      # notebooks
+ipykernel==7.4.0    # lets VS Code / Jupyter run this environment
+nbconvert==7.17.2   # run a notebook from the command line

@@ -406,7 +406,16 @@ select:focus {
 
 @media (max-width: 500px) {
     .stats-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 14px 8px;
+    }
+
+    .stat-card h3 {
+        font-size: 22px;
     }
 
     .filter-container {
@@ -437,4 +446,227 @@ select:focus {
         min-width: auto;
         padding: 9px 12px;
     }
+}
+/* =========================
+   Header actions
+========================= */
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.secondary-button {
+    background-color: white;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+}
+
+.secondary-button:hover {
+    background-color: #f3f4f6;
+}
+
+/* =========================
+   Analytics
+========================= */
+
+.loading-text {
+    color: #6b7280;
+}
+
+.sample-warning {
+    background-color: #fffbeb;
+    border: 1px solid #fcd34d;
+    color: #78350f;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.analytics-section {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.analytics-section h3 {
+    margin-bottom: 6px;
+}
+
+.section-description {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.chart-container {
+    width: 100%;
+    min-width: 0;
+}
+
+.chart-tooltip {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #1f2937;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.chart-tooltip strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.chart-tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+}
+
+.chart-swatch {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.table-toggle {
+    margin-top: 12px;
+}
+
+.table-toggle summary {
+    cursor: pointer;
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.table-toggle .table-wrapper {
+    margin-top: 12px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+.data-table th,
+.data-table td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.data-table th {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.mini-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.mini-stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mini-stats strong {
+    font-size: 22px;
+    color: #1f2937;
+}
+
+.mini-stats span {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.quality-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.quality-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.quality-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.quality-ok {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.quality-issue {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+@media (max-width: 800px) {
+    .analytics-section {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 500px) {
+    .mini-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+}
+
+/* =========================
+   Feedback states
+========================= */
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.info-message {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e3a8a;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 16px;
 }

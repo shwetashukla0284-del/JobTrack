@@ -1,50 +1,50 @@
-import { useState } from "react";
-import api from "../api";
-import { useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import api, { getErrorMessage } from "../api";
+import { saveSession } from "../auth";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [submitting, setSubmitting] = useState(false);
+    const submittingRef = useRef(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    const infoMessage = location.state?.registered
+        ? "Account created. Please log in."
+        : searchParams.get("expired")
+            ? "Your session has expired. Please log in again."
+            : "";
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        if (submittingRef.current) {
+            return;
+        }
+
         setErrorMessage("");
+        submittingRef.current = true;
+        setSubmitting(true);
 
         try {
-            const response = await api.post(
-                "/auth/login",
-                {
-                    email,
-                    password
-                }
-            );
+            const response = await api.post("/auth/login", {
+                email,
+                password
+            });
 
-            localStorage.setItem(
-                "token",
-                response.data.token
-            );
+            saveSession(response.data.token, response.data.user);
 
-            localStorage.setItem(
-                "user",
-                JSON.stringify(response.data.user)
-            );
-
-            navigate("/dashboard");
+            navigate("/dashboard", { replace: true });
 
         } catch (error) {
-            if (error.response?.status === 401) {
-                setErrorMessage(
-                    "Invalid email or password"
-                );
-            } else {
-                setErrorMessage(
-                    "Something went wrong. Please try again."
-                );
-            }
+            setErrorMessage(getErrorMessage(error));
+            submittingRef.current = false;
+            setSubmitting(false);
         }
     };
 
@@ -63,39 +63,51 @@ function Login() {
                     Login to manage your job applications
                 </p>
 
+                {infoMessage && (
+                    <p className="info-message" role="status">
+                        {infoMessage}
+                    </p>
+                )}
+
                 <form
                     className="auth-form"
                     onSubmit={handleSubmit}
                 >
 
                     <div className="form-group">
-                        <label>Email</label>
+                        <label htmlFor="email">Email</label>
 
                         <input
+                            id="email"
                             type="email"
+                            autoComplete="email"
                             value={email}
                             onChange={(event) =>
                                 setEmail(event.target.value)
                             }
                             placeholder="Enter your email"
+                            required
                         />
                     </div>
 
                     <div className="form-group">
-                        <label>Password</label>
+                        <label htmlFor="password">Password</label>
 
                         <input
+                            id="password"
                             type="password"
+                            autoComplete="current-password"
                             value={password}
                             onChange={(event) =>
                                 setPassword(event.target.value)
                             }
                             placeholder="Enter your password"
+                            required
                         />
                     </div>
 
                     {errorMessage && (
-                        <p className="error-message">
+                        <p className="error-message" role="alert">
                             {errorMessage}
                         </p>
                     )}
@@ -103,8 +115,9 @@ function Login() {
                     <button
                         className="auth-button"
                         type="submit"
+                        disabled={submitting}
                     >
-                        Login
+                        {submitting ? "Logging in…" : "Login"}
                     </button>
 
                 </form>

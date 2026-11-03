@@ -16,10 +16,11 @@ const userSchema = new mongoose.Schema(
             trim: true
         },
 
+        // bcrypt hash (length rules are checked on the plain password
+        // in authController, before hashing)
         password: {
             type: String,
-            required: true,
-            minlength: 6
+            required: true
         }
     },
     {

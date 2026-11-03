@@ -2,14 +2,40 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
+const MIN_PASSWORD_LENGTH = 6;
+// bcrypt only uses the first 72 bytes of a password
+const MAX_PASSWORD_LENGTH = 72;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const normalizeEmail = (email) =>
+    typeof email === "string" ? email.trim().toLowerCase() : "";
+
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { password } = req.body;
+        const name =
+            typeof req.body.name === "string" ? req.body.name.trim() : "";
+        const email = normalizeEmail(req.body.email);
 
         // Check required fields
-        if (!name || !email || !password) {
+        if (!name || !email || typeof password !== "string" || !password) {
             return res.status(400).json({
                 message: "Please provide name, email and password"
+            });
+        }
+
+        if (!EMAIL_PATTERN.test(email)) {
+            return res.status(400).json({
+                message: "Please provide a valid email address"
+            });
+        }
+
+        if (
+            password.length < MIN_PASSWORD_LENGTH ||
+            Buffer.byteLength(password) > MAX_PASSWORD_LENGTH
+        ) {
+            return res.status(400).json({
+                message: `Password must be ${MIN_PASSWORD_LENGTH} to ${MAX_PASSWORD_LENGTH} characters`
             });
         }
 
@@ -43,19 +69,28 @@ const registerUser = async (req, res) => {
         });
 
     } catch (error) {
+        // Two simultaneous sign-ups with the same email hit the unique index
+        if (error.code === 11000) {
+            return res.status(400).json({
+                message: "User already exists"
+            });
+        }
+
+        console.error("registerUser error:", error);
+
         res.status(500).json({
-            message: "Server error",
-            error: error.message
+            message: "Server error"
         });
     }
 };
 
 const loginUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { password } = req.body;
+        const email = normalizeEmail(req.body.email);
 
         // Check required fields
-        if (!email || !password) {
+        if (!email || typeof password !== "string" || !password) {
             return res.status(400).json({
                 message: "Please provide email and password"
             });
@@ -100,9 +135,10 @@ const loginUser = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("loginUser error:", error);
+
         res.status(500).json({
-            message: "Server error",
-            error: error.message
+            message: "Server error"
         });
     }
 };
