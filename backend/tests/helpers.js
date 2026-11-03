@@ -3,7 +3,7 @@
 const assert = require("node:assert/strict");
 const mongoose = require("mongoose");
 const request = require("supertest");
-const { MongoMemoryServer } = require("mongodb-memory-server");
+const { MongoMemoryServer } = require("mongodb-memory-server-core");
 
 const User = require("../models/user");
 const Job = require("../models/job");
